@@ -1,24 +1,48 @@
 # Escopo · Spazio 61
 
-> Arquivo interno (`projeto/`), nunca publicado nem entregue ao cliente.
-> A fonte de cada informação fica anotada. Nada daqui vai ao site sem confirmação por escrito do cliente.
+> Arquivo interno (`projeto/`), nunca publicado nem compartilhado com o cliente.
+> A fonte de cada informação fica anotada. Nada daqui vai ao site como fato sem confirmação por escrito do cliente.
 
-## Dados do cliente
+## Tipo do projeto
+**Site de abordagem (demonstração)**, feito antes de qualquer contato com o cliente (decisão do Lucas, 13/11/2026).
+- Sem contrato, sem pagamento, sem domínio e sem publicação pública.
+- Se o cliente fechar, seguir `projeto/trocas-ao-fechar.md` antes de qualquer publicação real.
+
+## Dados públicos do cliente
 | Item | Valor | Fonte |
 |---|---|---|
 | Nome do negócio | Spazio 61 (no Instagram: "Spazio61 Home & Office") | Lucas, 13/11/2026; Instagram |
-| Segmento | Marcenaria & Móveis planejados | Lucas, 13/11/2026 |
+| Segmento | Marcenaria & Móveis planejados | Lucas, 13/11/2026; bio do Instagram |
 | Cidade | Brasília (DF) | Lucas, 13/11/2026 |
 | Endereço | SRTVS 701, Bl. B, Loja 02/03, Asa Sul, Brasília/DF, CEP 70340-000 | Lucas, 13/11/2026 |
 | Instagram | [@spazio.61](https://www.instagram.com/spazio.61/) | Lucas, 13/11/2026 |
 | Link na bio | linktr.ee/spazio61 | Instagram (consulta em 13/11/2026) |
-| Razão social / CPF ou CNPJ | _pendente_ | — |
-| Responsável pelas aprovações | _pendente_ | — |
+| Razão social / CNPJ | não usar; dado provisório "TROCAR" | só o cliente sabe |
+| Responsável pelas aprovações | não se aplica até o fechamento | — |
 
-## Serviço contratado
-- **Serviço:** site (_confirmar se é Site institucional, R$ 2.000, até 5 páginas ou seções_).
-- **Contato do site:** botão de WhatsApp (sem formulário). Número: _pendente_.
-- **Domínio:** ainda não tem. Domínio .com.br desejado: _pendente_.
+## Regras deste projeto
+- **Só informações públicas** do perfil @spazio.61. O que só o cliente sabe (razão social, CNPJ, anos de mercado, números, depoimentos) não é apresentado como fato: usar dado provisório marcado "TROCAR" ou deixar de fora.
+- **O site é completo**, como seria normalmente: botão de WhatsApp, formulário completo, página de política de privacidade, página 404 e demais páginas.
+- **Dados fictícios num único arquivo de configuração em `site/`**, cada um marcado com "TROCAR". Nenhum dado fictício espalhado pelas páginas.
+- **WhatsApp provisório:** _decisão pendente do Lucas_: número inválido `90000-0000` ou o número da Vellora (informar qual).
+- **Formulário com envio simulado:** campos, validação e mensagem de sucesso iguais aos do site final, mas não envia nem coleta dado nenhum, não grava nada no navegador e não usa `/api/lead`.
+- **Política de privacidade** com os dados provisórios marcados "TROCAR".
+- **Sem analytics e sem cookies de medição.** Sem aviso de cookies enquanto não houver medição.
+- **noindex:** meta `robots` com `noindex, nofollow` em todas as páginas e cabeçalho `X-Robots-Tag: noindex, nofollow` no `_headers`, para não aparecer no Google.
+- **Imagens:** do Instagram da empresa, salvas pelo Lucas, registradas em `projeto/materiais/origem-imagens.md` como "uso apenas em proposta de demonstração, sem autorização ainda".
+- **Identidade própria do cliente**, nunca a da Vellora.
+
+## Regra de publicação
+Enquanto houver "TROCAR" em qualquer arquivo de `site/` ou o noindex estiver ativo, **o QA e a segurança dão parecer BLOQUEADO para publicação real**. A prévia de demonstração (abaixo) não é publicação real.
+
+## Como será mostrado ao cliente
+- Por prévia na Cloudflare (`*.pages.dev`) com noindex, **ou** por vídeo e prints.
+- A prévia só é publicada se o Lucas pedir explicitamente.
+- O repositório continua privado. A pasta `projeto/` nunca é compartilhada com o cliente.
+
+## Formato do site
+- **Formato:** _a definir pelo Lucas_ (referência: Site institucional, até 5 páginas ou seções).
+- **Contato:** botão de WhatsApp e formulário (envio simulado).
 - **Tecnologia:** _a confirmar pelo Lucas_ (HTML/CSS/JS puros ou Vite).
 
 ## Direção visual
@@ -30,11 +54,25 @@
 - Bio: "Espaços dinâmicos e exclusivos como você merece" · "Marcenaria & Móveis planejados" · "Fale com nossos consultores".
 - Destaques: Marcenaria, Cadeiras, Visitas, Sofás, Acessórios, Espreguiçadeira, Mesas, Poltronas.
 - Não foi possível ver as imagens nem as legendas. As referências visuais dependem dos prints do Lucas.
-- Uso no site só com autorização do cliente: textos e fotos do Instagram são dele, mas a confirmação fica registrada aqui.
 
-## Cronograma
-- Data de Início: _pendente_ (último entre contrato assinado, pagamento confirmado e material mínimo recebido).
-- Publicação prevista: Data de Início + 10 dias corridos.
+## Checklist do cliente (`vellora-time/docs/checklist-cliente.md`)
+Os itens abaixo ficam **adiados** até o fechamento e estão em `projeto/trocas-ao-fechar.md`.
+
+| Seção do checklist | Situação |
+|---|---|
+| 0. Fechamento: serviço no Anexo A, contrato, pagamento, repositório na `vellora-marketing` | adiado |
+| 0. Dados do Anexo A (cliente, CPF/CNPJ, responsável, domínio, pagamento, datas, portfólio, assinatura no rodapé) | adiado |
+| 0. Material mínimo enviado pelo cliente | adiado (usamos só o que é público) |
+| 1. Conversa e estratégia com o cliente | adiado (estratégia preliminar feita pela Vellora) |
+| 2. Direção visual: identidade própria; licença do template conferida | vale agora |
+| 2. Envio, resposta em 2 dias e aprovação por escrito | adiado |
+| 3. Criação: textos sem nada inventado, responsivo, WhatsApp e formulário, política, WCAG AA | vale agora |
+| 3. Formulário sem envio para terceiros | vale agora (envio simulado) |
+| 3. Aviso de cookies | não se aplica (sem medição) |
+| 3. Envio para aprovação | adiado |
+| 4. Revisões com o cliente | adiado |
+| 5. Publicação, domínio, Cloudflare em produção, transferência de acessos, Anexo B, suporte, portfólio | adiado |
+| 5. Prévia `*.pages.dev`: `projeto/` não exposto e parecer da segurança | vale se o Lucas pedir a prévia |
 
 ## Fora do escopo
 Se aparecer pedido de catálogo/loja virtual, páginas além do limite, anúncios, fotos, SEO avançado, analytics etc.: não executar e avisar Lucas ou Carlos (aditivo).
