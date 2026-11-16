@@ -77,5 +77,11 @@ Os itens abaixo ficam **adiados** até o fechamento e estão em `projeto/trocas-
 | 5. Publicação, domínio, Cloudflare em produção, transferência de acessos, Anexo B, suporte, portfólio | adiado |
 | 5. Prévia `*.pages.dev`: `projeto/` não exposto e parecer da segurança | vale se o Lucas pedir a prévia |
 
+## Controle de escopo
+| Data | Registro |
+|---|---|
+| 16/11/2026 | Construção da demonstração iniciada: página única com 5 seções (topo, o que fazemos, projetos, como funciona, contato) + política de privacidade + 404. Detalhes em `projeto/briefing.md`. Dentro do limite de 5 seções. Rodadas de revisão com o cliente: não se aplica (sem contrato). |
+| 16/11/2026 | Revisão do Lucas (briefing v2): template AERRA (GetLayers) entra só como referência de estrutura e movimento, **licença não verificada** (conferir e registrar em `vellora-time/templates/` antes de adotar). Pasta `projeto/materiais/referencias/layout/` ausente. Seções seguem 5 (topo, sobre/como funciona, linhas de produto, projetos, contato) + política + 404. |
+
 ## Fora do escopo
 Se aparecer pedido de catálogo/loja virtual, páginas além do limite, anúncios, fotos, SEO avançado, analytics etc.: não executar e avisar Lucas ou Carlos (aditivo).
