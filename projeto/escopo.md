@@ -82,6 +82,7 @@ Os itens abaixo ficam **adiados** até o fechamento e estão em `projeto/trocas-
 |---|---|
 | 16/11/2026 | Construção da demonstração iniciada: página única com 5 seções (topo, o que fazemos, projetos, como funciona, contato) + política de privacidade + 404. Detalhes em `projeto/briefing.md`. Dentro do limite de 5 seções. Rodadas de revisão com o cliente: não se aplica (sem contrato). |
 | 16/11/2026 | Revisão do Lucas (briefing v2): template AERRA (GetLayers) entra só como referência de estrutura e movimento, **licença não verificada** (conferir e registrar em `vellora-time/templates/` antes de adotar). Pasta `projeto/materiais/referencias/layout/` ausente. Seções seguem 5 (topo, sobre/como funciona, linhas de produto, projetos, contato) + política + 404. |
+| 16/11/2026 | Site refeito com o template **Leeward** (GetLayers), **licença não verificada** (bloqueia publicação real). Decisões do Lucas: GSAP + ScrollTrigger + Lenis hospedados em `site/js/vendor/`; estrutura de arquivos com CSP estrita; 5 seções adaptadas (topo, o que fazemos, como funciona, linhas e projetos, contato); topo escuro com módulos, sem foto em tela cheia. Saíram simulador, parceiros e números "ao vivo". Commit 92896d7, enviado ao GitHub. |
 
 ## Fora do escopo
 Se aparecer pedido de catálogo/loja virtual, páginas além do limite, anúncios, fotos, SEO avançado, analytics etc.: não executar e avisar Lucas ou Carlos (aditivo).
