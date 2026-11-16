@@ -30,7 +30,9 @@ jobs:
       - name: Ajusta caminhos da 404 ao endereço do Pages
         env:
           BASE: ${{ steps.pages.outputs.base_path }}
-        run: sed -i -E "s#(href|src)=\"/#=\"${BASE}/#g" site/404.html
+        run: |
+          sed -i -e "s#href=\"/#href=\"${BASE}/#g" -e "s#src=\"/#src=\"${BASE}/#g" site/404.html
+          grep -nE '(href|src)="' site/404.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
