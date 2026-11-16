@@ -23,5 +23,8 @@ secrets.*
 # --- Vellora: arquivos temporários do Playwright (prints e snapshots) ---
 .playwright-mcp/
 
-# --- Vellora: originais do cliente (pesados ou com dados; ficam só na máquina) ---
+# --- Vellora: imagens do cliente (pesadas, sem autorização ou com dados de terceiros; ficam só na máquina) ---
+# Os .md de projeto/materiais/ (ex.: origem-imagens.md) continuam no Git.
+projeto/materiais/imagens/
+projeto/materiais/referencias/
 projeto/materiais/originais/
