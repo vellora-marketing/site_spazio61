@@ -1,131 +1,124 @@
-# Segurança · Spazio 61 (demonstração)
+# Segurança · Spazio 61 (demonstração) · versão 3, template Leeward
 
 > Arquivo interno (`projeto/`), nunca publicado nem compartilhado com o cliente.
 > Data: **16/11/2026**. Revisão feita pelo agente `seguranca` (só recomenda ou bloqueia; quem decide é o Lucas).
-> Base: contexto do time v2, `projeto/notas-construcao.md`, `REGRAS-VELLORA.md` ("Regras de segurança") e o roteiro `seguranca.md`.
-> Nada foi corrigido, apagado ou commitado por esta revisão. A única escrita foi este arquivo.
+> Base: contexto do time **v3** (refazer com o template Leeward), `projeto/notas-construcao.md` (v3), `REGRAS-VELLORA.md` ("Regras de segurança") e o roteiro `.claude/agents/seguranca.md`.
+> Substitui o relatório da versão anterior (AERRA, commit 3c01366), que continua no histórico do git.
+> Nada foi corrigido, apagado, commitado ou enviado por esta revisão. A única escrita foi este arquivo.
 
 ## Pareceres
 
 | Uso | Parecer |
 |---|---|
-| **(a) Demonstração local, vídeo e prints** (mostrar ao próprio cliente) | **LIBERADO COM RESSALVAS** (ver "Ressalvas da demonstração") |
+| **(a) Demonstração local, vídeo e prints** (mostrar ao próprio cliente) | **LIBERADO COM RESSALVAS** (ver abaixo) |
 | **(b) Publicação real** (domínio do cliente ou qualquer endereço público, inclusive prévia `*.pages.dev`) | **BLOQUEADO** (esperado nesta fase) |
 
-**`projeto/` está exposto?** **Não**, no teste local: com o servidor servindo só `site/`, todos os caminhos internos deram `404` (tabela na seção 7). **No endereço publicado: não testável**, porque ainda não há prévia publicada. Testar antes de qualquer prévia `*.pages.dev` e antes da publicação real; até esse teste, qualquer publicação fica BLOQUEADA.
+**`projeto/` está exposto?**
+- **No site: não**, no teste local. Com o servidor servindo só `site/`, `/projeto/seguranca.md`, `/projeto/qa.md`, `/projeto/briefing.md`, `/projeto/notas-construcao.md`, `/docs/revisoes-seguranca/`, `/.git/config`, `/.gitignore` e `/site/index.html` deram **404** (seção 6). O servidor local não tem fallback de página única: o 404 é o próprio 404, não a home.
+- **No endereço publicado: não testável**, porque ainda não há prévia nem Cloudflare configurada. Testar antes de qualquer prévia e antes da publicação real; até esse teste, qualquer publicação fica BLOQUEADA.
+- **No GitHub: sim, por desenho.** O repositório tem remoto `github.com/vellora-marketing/site_spazio61` (privado), e o `main` remoto já está no commit 3c01366, que contém `projeto/`. Isso é o esperado: `projeto/` fica no repositório privado, fora da pasta publicada. Condição: o repositório continuar **privado**, e a Cloudflare, quando configurada, publicar **só `site/`** (diretório de saída `site`, sem build). Quem configura é o Lucas ou o Carlos; esta revisão não alterou nada.
 
 ### Ressalvas da demonstração (a)
-1. As imagens são do Instagram do cliente **sem autorização**: mostrar só ao próprio cliente (Spazio 61), por arquivo local, vídeo ou print. Não postar, não usar em portfólio e não enviar a terceiros.
-2. Não publicar a demonstração em endereço público (nem prévia) sem o teste de exposição da seção 7 e sem novo parecer.
-3. Antes do commit do coordenador, decidir sobre os prints de `projeto/materiais/referencias/` (problema S2 abaixo).
+1. As imagens são do Instagram do cliente **sem autorização**: mostrar só ao próprio cliente (Spazio 61), por arquivo local, servidor local, vídeo ou print. Não postar, não usar em portfólio, não enviar a terceiros.
+2. A estrutura e o movimento vêm do template **Leeward** (GetLayers), com **licença não verificada**. Para mostrar ao cliente em reunião, vídeo ou print, o risco é baixo; não usar a peça em portfólio nem em publicação até a licença ser registrada (S2).
+3. Não publicar a demonstração em endereço público (nem prévia) sem o teste de exposição da seção 6 no endereço real e sem novo parecer.
+4. Antes do próximo commit, decidir sobre os prints de `projeto/materiais/referencias/` (S6), que continuam fora do `.gitignore`.
 
 ### Motivos do BLOQUEADO para publicação real (b)
-- 13 itens `TROCAR` em `site/config.js` (WhatsApp, razão social, CNPJ, e-mail, data da política, `demonstracao: true`, 4 fotos) e itens "a confirmar" (endereço, etapas, descrições).
+- **Licença do template Leeward (GetLayers) NÃO verificada**: não há `TEMPLATE.txt` em `vellora-time/templates/` (a pasta só tem o `README.md`). O site reaproveita a estrutura, o grid, a coreografia e o runtime de movimento adaptado do prompt do template, que trazia código "verbatim" (S2).
+- Itens `TROCAR` em `site/config.js` (13 segundo as notas) e itens "a confirmar" (endereço, etapas, descrições das linhas).
 - noindex ativo (meta nas 3 páginas e `X-Robots-Tag` no `_headers`), como deve ser na demonstração.
-- Licença do template AERRA (GetLayers) **não verificada** (sem `TEMPLATE.txt` em `vellora-time/templates/`).
-- Imagens sem autorização por escrito do cliente.
-- Formulário simulado: falta o servidor (`/api/lead` com Turnstile, limite por IP e regra de firewall), conforme `projeto/trocas-ao-fechar.md`, seção 3.
-- Exposição de `projeto/` não testada no endereço publicado.
+- Imagens sem autorização por escrito do cliente (S3).
+- Formulário simulado: falta o servidor (`/api/lead` com validação no servidor, Turnstile, limite por IP e regra de firewall), conforme `projeto/trocas-ao-fechar.md` (S4).
+- Exposição de `projeto/` não testada no endereço publicado; Cloudflare ainda não configurada para publicar só `site/`.
 
 ## Problemas encontrados
 
 | # | Gravidade | Onde | Problema | Recomendação | Quem resolve |
 |---|---|---|---|---|---|
-| S1 | Alta (bloqueia publicação; esperado) | `site/config.js`, `site/*.html`, `site/_headers` | TROCAR, "a confirmar" e noindex ativos | Seguir `trocas-ao-fechar.md` (seções 2 e 4) ao fechar; buscar "TROCAR" em `site/` até zero | Lucas (dados com o cliente) + construtor |
-| S2 | Média | `projeto/materiais/referencias/*.jpg` (7 prints, não rastreados no git) | Os prints do perfil mostram dados pessoais de terceiros: nomes de usuário e fotos de 3 perfis em "Seguido(a) por", além do avatar e das notificações da conta de quem capturou. Não estão em `site/` (conferido por grep), mas o `.gitignore` não cobre a pasta e o próximo commit os levaria ao histórico do git. A regra é: nenhum dado pessoal de terceiros no repositório | Não commitar esses prints como estão: recortar/borrar a faixa "Seguido(a) por" e a interface da conta, ou mantê-los fora do git (ex.: mover para `projeto/materiais/originais/`, que já é ignorada, ou incluir a pasta no `.gitignore`). Decisão do Lucas | Lucas (decide) + coordenador (antes do commit) |
-| S3 | Alta para publicação / Baixa para demonstração | `site/assets/*.webp`, `projeto/materiais/origem-imagens.md` | Imagens do Instagram do cliente sem autorização; o link do post de origem ainda está "a anotar" | Autorização por escrito do cliente para cada imagem e registro em `origem-imagens.md`; anotar os links dos posts | Lucas |
-| S4 | Alta para publicação (adoção) | Referência de layout AERRA (GetLayers) | Licença não verificada; a pasta `projeto/materiais/referencias/layout/` não existe; não há `TEMPLATE.txt` | Ver seção 6 | Lucas |
-| S5 | Alta para publicação | Formulário (`site/index.html`, `site/js/main.js`) | Envio simulado. A validação é só no navegador; não há servidor | Ao fechar: `/api/lead` na Cloudflare com validação no servidor, Turnstile, limite por IP + regra no firewall, CORS só do domínio e só `POST`, neutralização de fórmula (`=`, `+`, `-`, `@`) antes de gravar na planilha, segredo e URL do Apps Script só nas configurações da Cloudflare, aprovação registrada dos serviços que recebem dados, política citando Google Planilhas (e Looker Studio, se usado) | Construtor + Lucas/Carlos (aprovação) |
-| S6 | Média (ao fechar) | `site/_headers` (CSP) | Turnstile exige liberar `https://challenges.cloudflare.com` em `script-src` e `frame-src`, e `connect-src 'none'` bloqueará o `fetch` para `/api/lead` | Ao ligar o formulário real: `connect-src 'self'`, `script-src 'self' https://challenges.cloudflare.com`, `frame-src https://challenges.cloudflare.com`; nada além disso. Nova revisão da segurança depois da mudança | Construtor |
-| S7 | Média (ao fechar) | `site/politica-de-privacidade.html` | Correta para a demonstração. Para a versão real, faltará citar: o destino dos dados do formulário (Google Planilhas/Apps Script), o Turnstile (Cloudflare) e os registros técnicos da hospedagem (Cloudflare, ex.: IP), além de prazo de guarda e base legal | Atualizar a página-modelo com os dados reais; o cliente revisa com o assessor jurídico | Construtor + cliente |
-| S8 | Baixa | `site/js/main.js` (linha 61) | Hoje o `config.js` é estático e seguro. Se no futuro o conteúdo vier de fora (planilha, API, CMS), `cfg.instagram` é atribuído direto a `href` sem validar o esquema. Uma URL `javascript:` já seria bloqueada pela CSP (sem `'unsafe-inline'`), mas convém defesa em profundidade. O resto está seguro: textos por `textContent`, WhatsApp só com dígitos, mapa com `encodeURIComponent`, e-mail com prefixo `mailto:`, imagens limitadas por `img-src 'self'` | Se o config passar a vir de fora: aceitar só `https://` (de preferência só `https://www.instagram.com/`) e caminhos de imagem relativos em `assets/`; manter `textContent` e nunca usar `innerHTML` | Construtor (só se o config deixar de ser estático) |
-| S9 | Baixa | `site/politica-de-privacidade.html` (linha 47) | O endereço da empresa está escrito no HTML, sem `data-cfg`, ao contrário da página inicial; se o endereço mudar no `config.js`, a política fica divergente | Ligar ao `config.js` (`endereco.busca`) ou lembrar de trocar nos dois lugares | Construtor |
-| S10 | Informativo | `site/_headers` | No servidor local (`python -m http.server`) o arquivo `/_headers` é entregue como arquivo comum (200). Na Cloudflare Pages ele é lido como configuração e não deveria ser servido; não contém nada sensível | No teste da prévia, conferir `/_headers` (deve dar 404 ou não trazer o arquivo) | Segurança (no teste da prévia) |
-| S11 | Informativo | `site/_headers` (HSTS) | `includeSubDomains` vai valer para todos os subdomínios do domínio do cliente | Ao fechar, confirmar que todos os subdomínios do domínio têm HTTPS | Lucas/Carlos |
-
-Nenhum problema crítico de código (XSS, recurso externo, segredo) foi encontrado.
+| S1 | Alta (bloqueia publicação; esperado) | `site/config.js`, `site/*.html`, `site/_headers` | TROCAR, "a confirmar" e noindex ativos | Seguir `trocas-ao-fechar.md` ao fechar; buscar "TROCAR" em `site/` até zero; tirar noindex e avisos de demonstração só na publicação aprovada | Lucas (dados com o cliente) + construtor |
+| S2 | **Alta (bloqueia adoção e publicação)** | Template Leeward (GetLayers): `site/css/style.css`, `site/js/main.js`, `site/js/preloader.js`, `site/js/vw.js`, estrutura do `index.html` | Licença não verificada. O prompt do template trazia código "verbatim"; o site reaproveita a estrutura (grid Kelder, `fl()`, `--raw-w*`, módulos), a coreografia e o runtime de movimento adaptado. Os textos, nomes, wordmark, SVGs, fotos, vídeos, URLs de assets e o CSS compilado **não** foram copiados (conferido: nenhuma ocorrência de `storage.getlayers.ai`, `getlayers` em URL, termos do Leeward como turbina, vento, MW, hectares). Mesmo assim, código-fonte adaptado de perto é cópia para fins de licença: se a licença do GetLayers não permitir uso comercial em projeto de cliente (ou exigir plano pago, atribuição ou limite de projetos), o JS e o CSS de movimento não podem ir para produção como estão. Também há risco contratual (cláusulas 6.5 e 9.1): o site entregue precisa ser adaptado, não uma cópia | Antes de adotar: (1) conferir no GetLayers a licença do Leeward (uso comercial em projeto de cliente, revenda, atribuição, limite de projetos, se exige assinatura ativa) e guardar print ou link da página da licença; (2) criar `vellora-time/templates/leeward/TEMPLATE.txt` com os campos do `templates/README.md` (nome, origem e link, licença, uso comercial sim/não e onde está escrito, restrições, data da conferência, conferido por); (3) se a licença exigir plano pago, registrar quem tem a licença comercial e avisar o cliente se houver custo (cláusula 9.3); (4) se não permitir, reescrever o movimento sem o código do template, mantendo só ideias gerais. Depois, nova revisão da segurança | Lucas (confere e registra) + construtor (se precisar reescrever) |
+| S3 | Alta para publicação / Baixa para demonstração | `site/assets/*.webp`, `projeto/materiais/origem-imagens.md` | Imagens do Instagram do cliente sem autorização; links dos posts de origem "a anotar" | Autorização por escrito do cliente para cada imagem e registro em `origem-imagens.md`; anotar os links dos posts | Lucas |
+| S4 | Alta para publicação | Formulário (`site/index.html`, `site/js/main.js`, linhas 264–292) | Envio simulado, validação só no navegador, sem servidor | Ao fechar: `/api/lead` na Cloudflare com validação no servidor, Turnstile, limite por IP + regra no firewall, CORS só do domínio e só `POST`, neutralização de fórmula (`=`, `+`, `-`, `@`), segredo e URL do Apps Script só nas configurações da Cloudflare, aprovação registrada dos serviços que recebem dados, política atualizada. Nova revisão depois | Construtor + Lucas/Carlos (aprovação) |
+| S5 | Média (ao fechar) | `site/_headers` (CSP) e `site/politica-de-privacidade.html` | O Turnstile exige liberar `https://challenges.cloudflare.com` em `script-src` e `frame-src`, e `connect-src 'none'` bloqueia o `fetch` para `/api/lead`. A política, correta para a demonstração, ainda não cita destino dos dados, Turnstile, registros técnicos da hospedagem (IP), prazo de guarda e base legal | Ao ligar o formulário real: `connect-src 'self'`, `script-src 'self' https://challenges.cloudflare.com`, `frame-src https://challenges.cloudflare.com`, nada além disso. Atualizar a política; o cliente revisa com o assessor jurídico | Construtor + cliente |
+| S6 | Média | `projeto/materiais/referencias/*.jpg` (7 prints) e `projeto/materiais/imagens/` (12 arquivos, ~7,8 MB), ambos **não rastreados** | Pendência da versão anterior: os prints de `referencias/` mostram dados pessoais de terceiros (perfis em "Seguido(a) por", avatar e notificações de quem capturou). O `.gitignore` não cobre essas pastas; um `git add -A` os levaria ao histórico e ao GitHub (privado, mas fica para sempre no histórico) | Não commitar `referencias/` como está: borrar/recortar ou manter fora do git (mover para `projeto/materiais/originais/`, já ignorada, ou incluir no `.gitignore`). Para `imagens/`, decidir se os originais do cliente vão para o repositório privado ou ficam só na máquina | Lucas (decide) + coordenador (antes do commit) |
+| S7 | Baixa (antes de publicar) | Comentários em `site/css/style.css` (linhas 3–4), `site/js/main.js` (linha 4) e `site/js/vw.js` (linha 1) | Os arquivos publicados dizem "inspirados no template Leeward (GetLayers; licença não verificada, ver projeto/notas-construcao.md)". Na publicação, isso fica visível para qualquer pessoa e revela origem do layout, situação da licença e um caminho interno (que dá 404, então não há exposição de conteúdo) | Antes de publicar: tirar dos arquivos de `site/` a menção a "licença não verificada" e ao caminho de `projeto/`; o registro fica nas notas e no `TEMPLATE.txt` | Construtor |
+| S8 | Baixa | Formulário sem JavaScript (`site/index.html`, `<form id="form-contato">` sem `action`/`method`) | Se o `main.js` não carregar ou falhar antes da linha 282, o envio do formulário vira um GET para a própria página com `nome`, `telefone` e `email` na URL (fica no histórico do navegador e nos registros do servidor). Não sai do próprio domínio (`form-action 'self'`), mas contraria "nada é enviado" | Na demonstração, aceitável. Na versão real, o formulário passa a ter `method="post"` e `action` para `/api/lead`; até lá, opcional: desabilitar o botão até o JS ligar o envio simulado | Construtor |
+| S9 | Informativo | `site/_headers` | No servidor local (`python -m http.server`) o `/_headers` é entregue como arquivo comum (200, 675 bytes). Na Cloudflare Pages ele é lido como configuração. Não contém nada sensível | No teste da prévia, conferir `/_headers` (404 ou sem o arquivo) | Segurança (no teste da prévia) |
+| S10 | Informativo | `site/js/vendor/lenis.min.js` | O arquivo não tem cabeçalho de copyright (o original do Lenis também não). A MIT exige o aviso junto: está atendida pelo `LICENSE-lenis.txt` na mesma pasta | Manter o `LICENSE-lenis.txt` sempre junto do `lenis.min.js` na publicação | Construtor |
+| S11 | Informativo | `site/js/vendor/LICENSE-gsap.txt` | A licença "No Charge" do GSAP (Webflow) permite uso comercial em sites, inclusive com o cliente pagando para criar o site; proíbe uso em ferramenta visual que concorra com o Webflow e cobrança de acesso dos usuários finais. Nenhuma das duas se aplica | Nada a fazer. Se um dia o site cobrar acesso de usuário final, revisar | — |
 
 ## O que foi verificado
 
 ### 1. Segredos e `.gitignore`
-- **Histórico do git** (`git log --all -p`, 3 commits, só leitura): nenhum segredo, chave, token, senha ou credencial da Cloudflare. As únicas ocorrências de palavras como "segredo" são instruções em `trocas-ao-fechar.md` e o próprio `.gitignore`.
-- **Arquivos atuais** (`grep` em todo o repositório, fora de `.git`): nenhum segredo. Nenhum `.env`, `.dev.vars`, `.wrangler/` ou arquivo de credencial.
-- **Remoto:** o repositório não tem remoto configurado (nada foi enviado para fora).
-- **`.gitignore`:** cobre o bloco de segredos da Vellora (`.env`, `.env.*`, `*.key`, `*.pem`, `*.p12`, `*.pfx`, `.dev.vars`, `.dev.vars.*`, `.wrangler/`, `credentials.json`, `*credentials*.json`, `*.credentials`, `secrets.*`, `.claude/settings.local.json`), `.playwright-mcp/` e `projeto/materiais/originais/`. Não cobre `projeto/materiais/referencias/` (ver S2).
+- **Arquivos atuais** (`site/` e `projeto/`, por grep de `api_key`, `secret`, `token`, `password`, `senha`, chaves privadas, `ghp_`, `github_pat_`, `AKIA`, `sk-…`): nenhum segredo. As únicas ocorrências são a palavra "Tokens" (cores no CSS) e textos das notas.
+- **Histórico do git** (`git log --all -p`, 4 commits, só leitura): nenhum segredo, chave, token, senha ou credencial da Cloudflare. Nenhum `.env`, `.log`, `.map` ou pasta do Playwright em qualquer commit.
+- **Remoto**: `origin = github.com/vellora-marketing/site_spazio61` (privado, segundo o contexto do time), `main` remoto em 3c01366; nada local à frente além das alterações não commitadas desta versão. Esta revisão não fez push.
+- **`.gitignore`**: cobre o bloco de segredos da Vellora (`.env`, `.env.*`, `*.key`, `*.pem`, `*.p12`, `*.pfx`, `.dev.vars`, `.dev.vars.*`, `.wrangler/`, `credentials.json`, `*credentials*.json`, `*.credentials`, `secrets.*`, `.claude/settings.local.json`), `.playwright-mcp/` e `projeto/materiais/originais/`. Não cobre `projeto/materiais/referencias/` nem `projeto/materiais/imagens/` (S6).
+- **Pasta de logs**: existe `.playwright-mcp/` na raiz (4 arquivos, um deles `console-….log`), mas é **ignorada** pelo `.gitignore` e nunca foi rastreada (`git ls-files` e histórico sem ocorrências). Nenhuma pasta de logs no repositório.
 
-### 2. `site/_headers`
-Formato válido para a Cloudflare Pages: linha de caminho `/*` sem recuo, cabeçalhos com recuo de 2 espaços no formato `Nome: valor`, finais de linha LF, uma regra só, linha mais longa (CSP) bem abaixo do limite.
+### 2. `_headers` (`site/_headers`)
+Uma regra `/*` com:
+- `Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests` → só `'self'`, **sem `unsafe-inline` e sem `unsafe-eval`**, sem domínio externo.
+- `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security: max-age=31536000; includeSubDomains`, `Permissions-Policy` (sensores, câmera, microfone, localização, pagamento, USB e browsing-topics desligados), `Cross-Origin-Opener-Policy: same-origin`, **`X-Robots-Tag: noindex, nofollow`**.
+- O `img-src data:` não é usado hoje (nenhum `data:` em HTML, CSS ou JS); pode ficar, é de baixo risco.
 
-| Cabeçalho | Valor | Resultado |
-|---|---|---|
-| Content-Security-Policy | `default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests` | OK: só `'self'`, sem `unsafe-inline` e sem `unsafe-eval`; tem `frame-ancestors`, `base-uri`, `object-src` e `form-action`. `img-src data:` é aceitável (não executa código) |
-| X-Content-Type-Options | `nosniff` | OK |
-| X-Frame-Options | `DENY` | OK |
-| Referrer-Policy | `strict-origin-when-cross-origin` | OK |
-| Strict-Transport-Security | `max-age=31536000; includeSubDomains` | OK (ver S11) |
-| Permissions-Policy | câmera, microfone, localização, sensores, pagamento, USB e browsing-topics desligados | OK |
-| Cross-Origin-Opener-Policy | `same-origin` | OK (extra) |
-| X-Robots-Tag | `noindex, nofollow` | OK |
+### 3. Recursos externos, links e código inline (`site/`, HTML, CSS e JS próprios)
+- **URLs `http(s)://`**: só links de navegação (WhatsApp `wa.me/5561900000000`, Google Maps, Instagram `@spazio.61`) em `index.html`, `politica-de-privacidade.html`, `config.js` e `js/cfg.js`. Nenhum script, folha de estilo, fonte, imagem ou iframe de fora.
+- **`storage.getlayers.ai`, `cdn.jsdelivr.net`, `unpkg`, `googleapis`, `gstatic`**: nenhuma ocorrência. "Leeward"/"GetLayers" só em comentários (S7).
+- **CSS**: único `url()` é a fonte local `../fontes/archivo-latin-wght-normal.woff2`; sem `@import`. `js/vendor/lenis.css` sem `url()`.
+- **`target="_blank"`**: todos os 9 links no HTML e o tile do WhatsApp criado pelo `main.js` (linhas 188–189) têm `rel="noopener noreferrer"`.
+- **Inline**: nenhum `<style>`, nenhum `style=""`, nenhum `<script>` com conteúdo e nenhum atributo `on*=` nas 3 páginas. Todos os scripts são `src=` locais (`vw.js` síncrono no `<head>`; `config.js`, vendor, `cfg.js` e `main.js` com `defer`; `preloader.js` no fim do `<body>`). Estilos dinâmicos via CSSOM (`element.style`/`setProperty`), permitido pela CSP.
+- **noindex**: `<meta name="robots" content="noindex, nofollow">` em `index.html`, `politica-de-privacidade.html` e `404.html`.
 
-A CSP não foi testada por mim no navegador (o Playwright fica com o QA); as notas de construção registram 0 erros de CSP no console com os cabeçalhos aplicados.
+### 4. `js/vendor`: versões, origem, rede e licenças
+Comparação por SHA-256 com os arquivos publicados no jsDelivr (API de dados `data.jsdelivr.com`, só leitura):
 
-### 3. Recursos externos e HTML
-- `grep` por `http(s)://` em HTML, CSS e JS: só links de navegação (`<a>` para `instagram.com/spazio.61`, Google Maps em busca, e o `wa.me` montado pelo JS). Nenhum script, folha de estilo, fonte, imagem, vídeo ou `iframe` de domínio externo. No CSS, o único `url()` é a fonte local `../fontes/outfit-variable-latin.woff2`; nenhum `@import`.
-- Todos os `target="_blank"` têm `rel="noopener noreferrer"` (os do WhatsApp recebem o mesmo `rel` pelo JS).
-- Nenhum `style=""`, `<style>`, `<script>` inline ou atributo `on*=`. Os únicos `<script>` são `src` locais (`js/boot.js`, `config.js`, `js/main.js`). Nenhum `<iframe>`, `<object>`, `<embed>`, `<base>` ou `action=`.
-- `<meta name="robots" content="noindex, nofollow">` nas 3 páginas.
-- Nenhuma referência a `projeto/` ou `materiais/` em `site/`.
+| Arquivo | Versão no arquivo | Origem conferida | Resultado |
+|---|---|---|---|
+| `gsap.min.js` (72 927 B) | GSAP 3.15.0 (cabeçalho) | npm `gsap@3.15.0/dist/gsap.min.js` | **idêntico** (hash igual) |
+| `ScrollTrigger.min.js` (44 575 B) | ScrollTrigger 3.15.0 (cabeçalho) | npm `gsap@3.15.0/dist/ScrollTrigger.min.js` | **idêntico** |
+| `lenis.min.js` (18 685 B) | Lenis `1.3.26` (constante interna) | npm `lenis@1.3.26/dist/lenis.min.js` (18 722 B) | **idêntico ao original menos a última linha** `//# sourceMappingURL=lenis.min.js.map` (37 bytes), removida de propósito, conforme as notas |
+| `lenis.css` (513 B) | — | npm `lenis@1.3.26/dist/lenis.css` | **idêntico** |
 
-### 4. JavaScript (`js/boot.js`, `js/main.js`, `config.js`)
-- Nenhum `innerHTML`, `outerHTML`, `insertAdjacentHTML` ou `document.write`. Conteúdo inserido por `textContent` e `createElement`.
-- Nenhum `fetch`, `XMLHttpRequest`, `sendBeacon`, `WebSocket`, `postMessage`, `localStorage`, `sessionStorage` ou `cookie`.
-- Nenhum `eval`, `new Function` ou `setTimeout` com texto.
-- Nenhum listener de `wheel`/`touchmove`; o único `preventDefault` é no `submit` do formulário. Scroll em listener passivo. Nenhum smooth-scroll em JS (o CSS só força `scroll-behavior: auto` com reduced-motion).
-- `style.setProperty` só em custom properties (`--lift`, `--py`), aceito pela CSP `style-src 'self'` (CSSOM).
-- Risco futuro de XSS se o config vier de fora: ver S8.
+- **Rede e execução dinâmica** nos três `.js`: nenhuma ocorrência de `fetch(`, `XMLHttpRequest`, `sendBeacon`, `WebSocket`, `EventSource`, `importScripts`, `eval(`, `new Function`, `document.cookie`, `localStorage`, `sessionStorage`, `postMessage` ou `sourceMappingURL`. As únicas URLs no GSAP/ScrollTrigger são `gsap.com` em comentário de licença e os namespaces XHTML/SVG do W3C (não são requisições).
+- **Licenças junto**: `LICENSE-gsap.txt` (Standard "No Charge" GSAP License, Webflow, texto copiado em 16/11/2026; uso comercial em sites permitido, inclusive com o cliente pagando para criar o site) e `LICENSE-lenis.txt` (MIT, darkroom.engineering). Ver S10 e S11.
 
-### 5. Formulário
-- `method="dialog"`, sem `action`: sem JS não envia nem navega; com JS o `submit` é interceptado, valida e mostra a mensagem em `role="status"`. Nenhuma requisição de rede, nada gravado no navegador.
-- Validação no navegador (nome ≥ 2 caracteres, telefone com 10 ou 11 dígitos, e-mail com formato básico) e `maxlength` nos 3 campos. A mensagem de sucesso usa o primeiro nome via `textContent` (sem risco de XSS).
-- Aviso honesto de demonstração e aviso LGPD com link para a política.
-- **Obrigatório ao fechar** (`trocas-ao-fechar.md`, seção 3): servidor `/api/lead` com Turnstile, limite por IP, regra de limite no firewall da Cloudflare e validação no servidor (ver S5 e S6).
+### 5. JS próprio (`vw.js`, `preloader.js`, `cfg.js`, `main.js`, `config.js`)
+- **`innerHTML`/`insertAdjacentHTML`**: 3 usos, todos com **strings fixas** no código, nunca com dados do `config.js` ou do usuário: `main.js:197` (SVG da seta, constante `SETA`), `main.js:387` (barras do botão de fechar) e `preloader.js:34` (rótulo "Carregando" e contador). Sem risco de XSS.
+- **`cfg.js`**: preenche a página só com `textContent` e atributos; WhatsApp montado com dígitos (`replace(/\D/g, "")`) e `encodeURIComponent`; mapa com `encodeURIComponent`; Instagram só se a URL começar com `https://`; e-mail só se passar por um padrão sem espaços, `<`, `>` ou aspas. Bom.
+- **Rede, armazenamento e cookies**: nenhum `fetch`, XHR, `sendBeacon`, `WebSocket`, `localStorage`, `sessionStorage`, IndexedDB, cookie ou `postMessage`. Nenhum `console.`, `debug` ou caminho local (`localhost`, `C:\`, nome de usuário) nos arquivos de `site/`.
 
-### 6. Privacidade e licenças
-- **Política de privacidade:** presente e coerente com o que o site faz (nada enviado, sem cookies, sem medição, sem gravação no navegador; links externos explicados; direitos da LGPD). Dados da empresa provisórios (`TROCAR` no `config.js`; sem JS aparecem "a informar"). Sem aviso de cookies, o que está correto porque não há coleta.
-- **Dados pessoais de terceiros em `site/`:** nenhum. Os nomes que aparecem em "Seguido(a) por" nos prints de referência não estão em `site/` nem nos `.md` de `projeto/` (grep). Eles existem só nas imagens de `projeto/materiais/referencias/` (S2).
-- **Fonte:** `site/fontes/outfit-variable-latin.woff2` (WOFF2 válido) com `site/fontes/OFL-Outfit.txt` (SIL OFL 1.1, copyright "The Outfit Project Authors"). Uso comercial permitido. Fraunces e Manrope não estão mais em `site/fontes/`.
-- **Imagens:** 5 WebP + favicons, todos derivados de `projeto/materiais/imagens/` (Instagram do cliente), registrados em `origem-imagens.md` como "sem autorização; uso só em demonstração". Nenhum metadado EXIF/XMP nos WebP. Conferi visualmente `fabrica.webp` (sem marca de máquina legível; o painel da máquina já aparece desfocado) e `lavabo.webp` (sem seta e sem pontinhos do Instagram). Nenhuma imagem de `referencias/` em `site/`.
-- **Template AERRA (GetLayers):**
-  - Licença **não verificada**: não há `TEMPLATE.txt` nem pasta do AERRA em `vellora-time/templates/` (só o `README.md`), e a pasta `projeto/materiais/referencias/layout/` não existe.
-  - **Risco de cópia: baixo, com a limitação de que não pude comparar com o template** (não há cópia dele no repositório). O que dá para afirmar: em `site/` não há menção a AERRA, GetLayers, Webflow, Framer ou three.js, nem atributos típicos de exportação (`data-w-id`, `wf-`), nem URLs de assets externos, nem texto de exemplo (lorem). Os textos são da bio e das frases públicas da Spazio 61, os ícones SVG são simples e próprios, e as notas registram que só estrutura, ritmo e movimento foram usados, sem marca 3D, giro 360°, revelação por pixels, números ou depoimento. O que foi aproveitado (nav de vidro, título em duas partes, grade 3×3 com diagonal vazia, pré-carregador com contador) é padrão de layout, não código, texto nem asset.
-  - **O que falta para adotar:** conferir a licença do AERRA no GetLayers (uso comercial em projeto de cliente, atribuição, limite de projetos, revenda), criar `vellora-time/templates/<nome>/TEMPLATE.txt` preenchido (origem, licença, data da conferência, quem conferiu), confirmar que nenhum código, texto, SVG, imagem, fonte ou URL do template foi copiado e que o resultado é adaptado ao cliente (contrato, cláusulas 6.5 e 9.1). Se a licença não permitir, manter só as ideias genéricas de layout.
+### Formulário e política
+- **Formulário simulado** (`main.js`, linhas 264–292): `preventDefault`, validação no navegador (nome ≥ 2, telefone 10–13 dígitos, e-mail), erros nos campos com `aria-invalid` e foco no primeiro; no sucesso, `reset()` e mensagem em `role="status"`. Nada é enviado nem guardado. Aviso honesto acima ("Demonstração: este formulário não envia nem guarda nenhum dado") e link para a política. Ver S8 para o caso sem JS.
+- **Política** (`politica-de-privacidade.html`): coerente com o site. Diz que é demonstração, que o formulário não envia nem guarda dados, que não há cookies, medição nem gravação no navegador (confirmado: nem o código próprio nem GSAP/Lenis usam armazenamento), cita os links para WhatsApp, Instagram e Google Maps, direitos da LGPD e dados da empresa "a informar". Para a versão real, ver S5.
 
-### 7. Estrutura e exposição
-- `site/` só tem arquivos do site (3 HTML, `config.js`, `_headers`, `css/`, `js/`, `fontes/`, `assets/`). Nenhum `.md`, nota, log ou arquivo interno.
-- `projeto/` fica na raiz, fora de `site/`. Nada em `site/` aponta para `projeto/`.
-- Nenhuma pasta de logs ou de prints de teste no repositório (`.playwright-mcp/` não existe; os prints do teste ficaram no scratchpad, fora do repositório).
-- **Teste local**, feito pelo agente `seguranca` em 16/11/2026, com `python -m http.server 8791 --bind 127.0.0.1 --directory site` e `curl` (só GET, saída descartada); servidor encerrado no fim:
+### Licenças
+- **Fonte Archivo**: `site/fontes/archivo-latin-wght-normal.woff2` é **idêntica** (SHA-256) ao arquivo do Fontsource `@fontsource-variable/archivo` 5.2.6–5.2.8 (não é a cópia do GetLayers). `OFL-Archivo.txt` junto (SIL Open Font License 1.1, "Copyright 2020 The Archivo Project Authors"). Uso comercial permitido. A Outfit da versão anterior foi apagada de `site/fontes/` (ainda está no histórico, também OFL).
+- **GSAP e Lenis**: ver seção 4.
+- **Imagens**: do Instagram do cliente, sem autorização, só para demonstração (S3).
+- **Template Leeward (GetLayers)**: licença NÃO verificada (S2). O que falta para adotar: `vellora-time/templates/leeward/TEMPLATE.txt` preenchido (origem e link, licença, uso comercial em projeto de cliente sim/não e onde está escrito, restrições, data da conferência, conferido por) e a confirmação da licença comercial (plano/assinatura, se houver custo).
 
-| Caminho | Código |
-|---|---|
-| `/` e `/index.html` | 200 (esperado) |
-| `/config.js` | 200 (esperado; só dados públicos e provisórios) |
-| `/_headers` | 200 (só no servidor local; ver S10) |
-| `/projeto/seguranca.md` | **404** |
-| `/projeto/qa.md` | **404** |
-| `/projeto/briefing.md` | **404** |
-| `/projeto/notas-construcao.md` | **404** |
-| `/projeto/trocas-ao-fechar.md` | **404** |
-| `/../projeto/briefing.md` e `/%2e%2e/projeto/briefing.md` (tentativa de sair da pasta) | **404** |
-| `/docs/revisoes-seguranca/` | **404** |
-| `/.git/config` e `/.gitignore` | **404** |
-| `/nao-existe-xyz` | 404 |
+### 6. Estrutura e exposição (teste local, 16/11/2026)
+- **Estrutura**: `site/` contém só o site (3 HTML, `_headers`, `config.js`, `assets/`, `css/`, `fontes/`, `js/`, `js/vendor/`). Nada interno em `site/` (sem `.md`, sem relatórios, sem originais, sem `.map`, sem `.env`). `projeto/` fica na raiz, fora de `site/`.
+- **Teste**: agente `seguranca`, 16/11/2026, `python -m http.server 8791 --bind 127.0.0.1 --directory site`, `curl` só com GET e saída descartada; servidor encerrado no fim.
 
-Conclusão local: **`projeto/` não está exposto** quando só `site/` é servido.
+| Caminho | Código | Tipo / tamanho | Conclusão |
+|---|---|---|---|
+| `/` e `/index.html` | 200 | text/html, 21 934 B | home |
+| `/projeto/seguranca.md` | **404** | text/html, 460 B | não exposto |
+| `/projeto/qa.md` | **404** | text/html, 460 B | não exposto |
+| `/projeto/briefing.md` | **404** | text/html, 460 B | não exposto |
+| `/projeto/notas-construcao.md` | **404** | text/html, 460 B | não exposto |
+| `/docs/revisoes-seguranca/` | **404** | text/html, 460 B | não exposto |
+| `/.git/config` | **404** | text/html, 460 B | não exposto |
+| `/.gitignore` | **404** | text/html, 460 B | não exposto |
+| `/site/index.html` | **404** | text/html, 460 B | não exposto |
+| `/nao-existe-xyz` (controle) | 404 | text/html, 460 B | igual aos internos |
+| `/_headers` | 200 | octet-stream, 675 B | esperado no servidor local (S9) |
+| `/js/vendor/LICENSE-gsap.txt`, `/fontes/OFL-Archivo.txt` | 200 | text/plain | licenças públicas, devem ser publicadas |
 
-- **Endereço publicado: não testável, sem prévia publicada.** Testar antes de qualquer prévia `*.pages.dev`: confirmar que a Cloudflare publica só `site/` (pedir a configuração do deploy ao Lucas ou ao Carlos) e rodar no endereço da prévia `/projeto/seguranca.md`, `/projeto/qa.md`, `/projeto/briefing.md`, `/docs/revisoes-seguranca/` e `/_headers`, esperando 404. Conferir também que os cabeçalhos do `_headers` chegam de fato (`curl -sI`) e que Rocket Loader, Zaraz e Web Analytics automático estão desligados.
+- **Cloudflare**: ainda não configurada. Quando for, deve publicar **só `site/`** (diretório de saída `site`), com Rocket Loader, Zaraz e Web Analytics automático desligados (quebram a CSP) e branch de prévia até o ok. Depois, repetir esta tabela no endereço de prévia e no público (pelo `curl` ou com confirmação manual do Lucas ou do Carlos).
 
-## Próximos passos
-1. Lucas: decidir sobre os prints de `referencias/` (S2) **antes** do commit do coordenador.
-2. Demonstração: mostrar só ao cliente, por arquivo local, vídeo ou prints.
-3. Ao fechar: `trocas-ao-fechar.md` inteiro, licença do AERRA (S4), S5 a S7 e S9; depois, nova revisão da segurança com o teste de exposição no endereço da prévia e no público.
+## Entrega (para quando fechar)
+Lista de acessos temporários da Vellora a remover nas contas do cliente (Registro.br, planilha do cliente, redes sociais) e senhas que não podem ficar guardadas: **nenhum acesso do cliente foi usado nesta fase**. Reavaliar na entrega.

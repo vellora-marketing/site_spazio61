@@ -1,153 +1,156 @@
-# Notas de construção · Spazio 61 (demonstração)
+# Notas de construção · Spazio 61 (demonstração) · versão 3, template Leeward
 
 > Arquivo interno (`projeto/`), nunca publicado nem compartilhado com o cliente.
-> Construído em 16/11/2026 pelo `construtor-de-site`, seguindo o contexto do time versão 2 (template AERRA como referência, sans fina, 6 linhas de produto).
-> Sem commit e sem push. Parecer BLOQUEADO para publicação real é o esperado enquanto houver TROCAR e noindex.
+> Autor: construtor-de-site · 16/11/2026. Substitui as notas da versão anterior (AERRA, commit 3c01366, que continua no histórico do git).
 
-## 1. Páginas
-| Página | Arquivo | Observação |
-|---|---|---|
-| Página única com 5 seções | `site/index.html` | Topo · Sobre/como funciona · Linhas · Projetos · Contato, mais o rodapé |
-| Política de privacidade | `site/politica-de-privacidade.html` | Dados provisórios vindos do `config.js` (TROCAR). Diz a verdade: o formulário não envia nem guarda nada, sem cookies, sem medição |
-| 404 | `site/404.html` | Estilo do site, link para `/` |
+## 1. O que foi feito
+O site foi refeito a partir do prompt do template **Leeward** (GetLayers), adaptado à Spazio 61, conforme as decisões do Lucas de 16/11/2026:
+1. **Animações como o prompt pede:** GSAP + ScrollTrigger + Lenis (scroll suave). Por causa da CSP estrita, as bibliotecas estão hospedadas em `site/js/vendor/` em vez de vir do CDN.
+2. **Estrutura de arquivos + CSP estrita:** os estilos inline do template viraram classes. Não há `style=""` no HTML, nem no HTML gerado por JS. Posições e cores dinâmicas são aplicadas via CSSOM (`element.style`), que a CSP permite.
+3. **5 seções adaptadas** (mapeamento na seção 4).
+4. **Topo escuro com módulos**, com um placeholder identificado para foto ou vídeo em alta.
 
-Seções do `index.html`:
-1. **Topo** (escuro `#1A1712`, tela cheia): legenda "Home & Office · Brasília", título "Espaços dinâmicos e exclusivos" (atenuado) + "como você merece" (branco), subtítulo "Marcenaria & móveis planejados de alto padrão", botão "Fale com a nossa equipe" (WhatsApp), "spazio 61" gigante em peso 100 com gradiente que some.
-2. **Sobre / como funciona** (off-white): "Marcenaria **descomplicada**, da concepção à execução", fotos pequenas da loja e da produção, destaques Atendimento, Projeto e Execução com o selo visível "a confirmar" e a nota "Etapas a confirmar com a Spazio 61".
-3. **Linhas** (escuro): "Móveis planejados **de alto padrão**", 6 cartões de vidro (Marcenaria, Cadeiras, Sofás, Mesas, Poltronas, Acessórios), cada um com descrição neutra e o selo "a confirmar".
-4. **Projetos** (off-white): "Espaços **exclusivos**", grade de 6 posições: sala de jantar, lavabo e 4 placeholders.
-5. **Contato** (escuro com painel fosco claro): formulário simulado (nome, telefone, e-mail), WhatsApp, endereço ("a confirmar"), link do mapa e Instagram.
+Páginas: `index.html` (5 seções), `politica-de-privacidade.html` e `404.html`.
 
-Todos os títulos e chamadas vêm da bio e das frases públicas da marca. As descrições curtas (destaques e cartões) são da Vellora, neutras e marcadas "a confirmar". Não há números, depoimentos, clientes, prazos nem promessas. Os 5 benefícios dos carrosséis **não** entraram.
-
-## 2. Estrutura de arquivos
-```
-site/
-  index.html
-  politica-de-privacidade.html
-  404.html
-  config.js                 dados provisórios e conteúdo variável (TROCAR / confirmar)
-  _headers                  CSP e cabeçalhos de segurança, noindex
-  css/style.css             folha única, mobile primeiro
-  js/boot.js                no <head>: classe .has-js + pré-carregador (no máximo 1,5 s)
-  js/main.js                config → página, menu, revelações, letras do topo, formulário
-  fontes/outfit-variable-latin.woff2
-  fontes/OFL-Outfit.txt
-  assets/                   imagens WebP e favicons
-```
-- Sem bibliotecas, sem npm e sem Vite. Scripts clássicos (sem `type="module"`, que quebra em `file://`).
-- Nenhum `style=""`, `<script>` inline nem `on*=` (conferido com grep). O JS só altera custom properties (`--lift`, `--py`) via `element.style.setProperty`, o que a CSP `style-src 'self'` aceita porque é CSSOM.
-- `site/.gitkeep` foi apagado (a pasta agora tem conteúdo).
-
-## 3. Caminhos
-- `index.html` e `politica-de-privacidade.html` usam **caminhos relativos** (`css/style.css`, `assets/...`), para abrir por duplo clique (`file://`) e também na raiz do domínio.
-- `404.html` usa **caminhos absolutos a partir de `/`** (`/css/style.css`, `/assets/...`), porque a Cloudflare a serve em qualquer profundidade de URL. Por isso ela **não** fica com estilo quando aberta por `file://` (é o esperado).
-- A fonte é chamada no CSS por `../fontes/...`, relativo ao próprio CSS, e funciona nos dois casos.
-- O HTML nunca referencia `projeto/`.
-
-## 4. Fonte
-| Item | Valor |
+## 2. Arquivos de `site/`
+| Arquivo | O que é |
 |---|---|
-| Nome | **Outfit** (variável, eixo `wght` de 100 a 900, peso 100 real) |
-| Versão | 1.100 (`Version 1.100;gftools[0.9.27]`), pacote `@fontsource-variable/outfit@5.3.0`, subconjunto latin |
-| Origem | https://cdn.jsdelivr.net/npm/@fontsource-variable/outfit@5.3.0/files/outfit-latin-wght-normal.woff2 (o mesmo arquivo do `fontsource/fonts/outfit:vf@latest`). SHA-256 `6c18d579fd87c3776be068b762cbc83fde3acb543d49eabd3ade842eb987e887` |
-| Licença | SIL Open Font License 1.1, que permite uso comercial. Texto em `site/fontes/OFL-Outfit.txt` (do github google/fonts, `ofl/outfit/OFL.txt`) |
-| Validação | Cabeçalho `wOF2`, aberto com fontTools: eixo `wght` 100–900, todos os acentos do português presentes. Não tem o glifo "→", por isso as setas são SVG |
-| Uso | Peso 100 só no "spazio 61" gigante, no 404 e no contador do pré-carregador. Títulos em 200/300, texto corrido em 300 (≥ 17 px), rótulos e botões em 400/500, palavra-chave em 600 verde |
+| `index.html` | Página única. Textos de reserva iguais aos do `config.js` |
+| `politica-de-privacidade.html` | Política (dados TROCAR vêm do `config.js`) |
+| `404.html` | Página de erro com o visual do topo; caminhos absolutos a partir de `/` |
+| `config.js` | Todos os textos, dados provisórios (TROCAR), itens "confirmar" e a lista de fotos |
+| `css/style.css` | Grid Kelder, tokens e componentes |
+| `js/vw.js` | Síncrono no `<head>`: define `--vw`/`--vw-full` e troca `no-js` por `js` |
+| `js/preloader.js` | Monta as faixas de módulos do pré-carregamento antes da primeira pintura. Se o `main.js` não rodar, o pré-carregamento some sozinho em 4 s |
+| `js/cfg.js` | Preenche textos e links (WhatsApp, mapa, Instagram, e-mail, ano) a partir do `config.js`. Usa só `textContent` e atributos |
+| `js/main.js` | Movimento, faixa de módulos do topo, menu, formulário simulado, cursor |
+| `js/vendor/` | `gsap.min.js` e `ScrollTrigger.min.js` (3.15.0), `lenis.min.js` e `lenis.css` (1.3.26), com as licenças |
+| `fontes/` | Archivo variável (latin) + `OFL-Archivo.txt` |
+| `assets/` | Logo, favicons e as 4 fotos WebP (inalteradas desde a versão anterior) |
+| `_headers` | CSP e demais cabeçalhos + `X-Robots-Tag: noindex, nofollow` (inalterado; continua válido) |
 
-Fraunces e Manrope (do construtor anterior) foram **removidas** de `site/fontes/`, junto com os OFL delas.
+Caminhos: `index.html` e a política usam caminhos relativos; a `404.html` usa caminhos absolutos (por isso, aberta por `file://`, fica sem estilo, o que é esperado).
 
-## 5. Imagens
-Todas são do Instagram @spazio.61, para uso só em demonstração e sem autorização (ver `projeto/materiais/origem-imagens.md`). Reaproveitei os WebP do construtor anterior depois de conferir cada uma visualmente.
-
-| Origem (`projeto/materiais/imagens/`) | Arquivo em `site/assets/` | Tamanho | Recorte / conferência | Onde e quanto é exibida |
-|---|---|---|---|---|
-| `logo spazio.jpg` | `logo-spazio-61.webp` | 360 × 360 | reduzida, sem ampliar | nav 40 px, rodapé 36 px |
-| `logo spazio.jpg` | `favicon.ico` (48), `favicon-32.png`, `apple-touch-icon.png` (180) | — | — | favicons |
-| `130557.png` (placa da loja) | `loja-spazio-61.webp` | 696 × 865 | sem recorte, sem interface | Sobre, até 440 px de largura (696 / 1,5 = 464) |
-| `130815.png` (sala de jantar) | `sala-de-jantar.webp` | 694 × 862 | sem recorte | Projetos, até ~390 px (máximo de 420 px) |
-| `130909.png` (lavabo) | `lavabo.webp` | 622 × 812 | recortado: **sem** a seta ">" e **sem** os pontinhos (conferido com zoom) | Projetos, até ~390 px (622 / 1,5 = 415) |
-| `130957.png` (fábrica) | `fabrica.webp` | 568 × 552 | recortado de y 0 a 552: a placa "morbidelli" (y ≈ 600–660) ficou **fora**. Conferido com zoom: nenhuma marca legível. A área quadriculada no cabeçote é o reflexo do vidro, que já existe no original | Sobre, até 360 px (568 / 1,5 = 378) |
-
-- Todas têm `width`/`height` declarados, `loading="lazy"`, `decoding="async"` e alt descritivo em português.
-- Nenhuma foto no topo, em tela cheia ou com parallax.
-- Não usadas: slides de carrossel, tudo de `referencias/`, fotos com pessoas, Manhattan Shopping, Casa Cor Goiás e marcas de máquinas.
-
-## 6. Placeholders
-- Projetos: 4 posições `data-placeholder` com o rótulo visível "Foto a confirmar" e a legenda "Projeto a confirmar". Para trocar, basta substituir `{ placeholder: true }` em `config.js → projetos` por `{ src, largura, altura, alt, legenda }`. O layout não muda.
-- O HTML tem a mesma grade como reserva sem JS. Com JS, ela é reconstruída a partir do `config.js` (fonte única).
-
-## 7. `config.js`: TROCAR e confirmar
-| Chave | Valor atual | Marca |
-|---|---|---|
-| `demonstracao` | `true` | TROCAR |
-| `whatsapp.numero` | `5561900000000` | TROCAR |
-| `whatsapp.exibicao` | `(61) 90000-0000` | TROCAR |
-| `whatsapp.mensagem` | "Teste da demonstração Spazio 61" | TROCAR |
-| `endereco.linha1/linha2/cep/busca` | SRTVS 701, Bloco B, Loja 02/03 · Asa Sul, Brasília/DF · CEP 70340-000 | confirmar |
-| `empresa.razaoSocial` | `[Razão social da empresa]` | TROCAR |
-| `empresa.cnpj` | `00.000.000/0000-00` | TROCAR |
-| `empresa.email` | `contato@example.com` | TROCAR |
-| `empresa.atualizacaoPolitica` | `16/11/2026` | TROCAR |
-| `projetos[2..5]` | placeholders | TROCAR |
-
-Total: 13 ocorrências de "TROCAR", todas em `site/config.js`. Nas páginas não há dado fictício: os campos da política mostram "a informar" sem JS, e os botões de WhatsApp apontam para `#contato` até o JS montar o link `wa.me` a partir do `config.js`. O endereço (público) aparece no HTML como reserva e na página com o selo "a confirmar".
-
-## 8. Segurança e privacidade
-- `_headers` (aplicado a `/*`): `Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; manifest-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests`, além de `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Strict-Transport-Security: max-age=31536000; includeSubDomains`, `Permissions-Policy` (câmera, microfone, localização etc. desligados), `Cross-Origin-Opener-Policy: same-origin` e `X-Robots-Tag: noindex, nofollow`.
-- `<meta name="robots" content="noindex, nofollow">` nas 3 páginas.
-- O formulário usa `method="dialog"`: sem JS, enviar não faz nada (não há navegação nem requisição). Com JS, o `submit` é interceptado e só valida e mostra a mensagem. Nenhum fetch, nenhum localStorage, sessionStorage ou cookie (conferido no teste).
-- Links externos (WhatsApp, Instagram, Google Maps em busca, sem iframe) com `target="_blank" rel="noopener noreferrer"`.
-
-## 9. Uso do template AERRA (GetLayers)
-- **Licença NÃO verificada.** Antes de adotar de fato (ao fechar), conferir a licença e registrar em `vellora-time/templates/` com `TEMPLATE.txt`, conforme as REGRAS.
-- **A pasta `projeto/materiais/referencias/layout/` (referencias.md e aerra-getlayers.md) não existe.** A única referência usada foi a descrição do pedido do Lucas no contexto do time (v2). Não vi o template.
-- **Aproveitado (só estrutura, ritmo e movimento, com código próprio):** nav fixa de vidro com botão de contato e menu hambúrguer; topo escuro com a marca gigante e fina em gradiente, com letras em velocidades diferentes; título em duas partes (atenuado + branco) e palavra por palavra em ≥ 1280 px; entrada em sequência de legenda, subtítulo e CTA; revelações de entrada; divisor fino com rótulo e número; destaques com ícone em bloco cinza; grade 3×3 de cartões de vidro com a diagonal vazia; CTA preto com seta que troca e brilho; painel de contato fosco com campos sublinhados; pré-carregador com contador e janela que abre; alternância off-white/escuro.
-- **Não aproveitado:** textos, logo, SVGs, fotos, vídeo, nomes, código, URLs de assets, three.js, marca 3D, giro 360°, revelação por pixels, seção de números e depoimento. Nada de coordenadas absolutas: grid/flex fluido, mobile primeiro.
-
-## 10. Movimento
-- **Letras do topo:** listener de scroll `passive`. O `requestAnimationFrame` só é pedido quando houve scroll. O cálculo para quando o topo sai da tela (IntersectionObserver) e o recurso é desligado com `prefers-reduced-motion` (inclusive se a preferência mudar com a página aberta). Teste: com a página parada, nenhum rAF novo em 1,5 s.
-- **Parallax de foto: mecanismo pronto e DESLIGADO.** Só atua em `img[data-parallax]` com `naturalWidth ≥ 1600 px` (constante `LARGURA_MIN_PARALLAX` em `js/main.js`, classe `.parallax-ativo` no CSS). Hoje nenhuma imagem tem o atributo e nenhuma teria resolução: todas têm 568 a 696 px. Ampliar foto de baixa resolução em parallax ficaria borrado. Para ligar quando chegarem originais em alta, pôr `parallax: true` no item do `config.js` (ou `data-parallax` na `<img>`).
-- **Revelações:** IntersectionObserver, fade + subida de 24 px, uma vez só (unobserve). Só escondem o conteúdo depois que o JS adiciona `.reveal-ready`: sem JS, tudo fica visível. Nos cartões de vidro, a revelação está no conteúdo (`.cartao-conteudo`), nunca no cartão.
-- **Pré-carregador:** só aparece porque o `js/boot.js` adiciona `.preloading`. Tem limite rígido (abre em 1 s, some em 1,5 s) independente do `main.js`. O scroll é liberado quando a janela começa a abrir. Não roda com reduced-motion, e a entrada do topo espera ele abrir.
-- **Reduced-motion:** tudo começa visível, sem letras se movendo, sem pré-carregador e sem transições (conferido com `emulateMedia`).
-
-## 11. Testes (16/11/2026, Playwright)
-- Servidor local `python -m http.server 8765` e um segundo servidor de teste (script no scratchpad) que aplica os cabeçalhos do `_headers`, para testar a CSP de verdade: **0 erros e 0 avisos no console** com a CSP ativa.
-- Prints da página inteira em 390, 768, 1280 e 1440 px, sem rolagem horizontal (`scrollWidth` igual à largura em todas).
-- Rede: todas as requisições foram ao `127.0.0.1` (HTML, CSS, JS, config, fonte, imagens). Nenhum domínio externo. Nenhuma requisição ao enviar o formulário.
-- Menu do celular: fechado com `inert` (o Tab pula os links), abre por Enter, o Tab entra no menu, o Escape fecha e devolve o foco ao botão.
-- Formulário: com erro, `aria-invalid` + `aria-describedby` nos 3 campos e foco no primeiro erro. Com sucesso, a mensagem aparece em `role="status"`, o formulário é limpo, a URL não muda e nada é gravado no navegador.
-- `file:///.../site/index.html`: a fonte, as 6 imagens, o config e os links `wa.me` funcionam. A política também.
-- Contraste (calculado): texto suave `#5A5248` em `#F4F1EC` = 6,81:1; verde-escuro `#00742C` em `#F4F1EC` = 5,27:1; `#9A9286` (título atenuado) em `#1A1712` = 5,81:1; `#B8AFA3` em `#1A1712` = 8,25:1; `#5CD46C` em `#1A1712` = 9,44:1. Não há texto branco sobre `#00973A` (só o ícone da seta, 3,8:1, como elemento gráfico).
-- Áreas de toque ≥ 44 px, exceto dois links dentro de frases (exceção "inline" da WCAG).
-- Nota de teste: o print de página inteira do Playwright em ≥ 1280 px reinicia a animação palavra por palavra, porque a captura reaplica a media query. Os prints finais foram tirados com as animações congeladas. Não é defeito do site.
-
-## 12. Rodada de correções do QA (16/11/2026, ver `projeto/qa.md`)
-| # | Problema do QA | Correção | Medição depois (Playwright, CSP ativa, porta 8791) |
+## 3. Bibliotecas, fonte e licenças
+| Item | Versão | Origem | Licença |
 |---|---|---|---|
-| 1 (média) | Selo "a confirmar" do endereço com 1,74:1 (herdava `.escuro .selo`) e em caixa-alta | O `.painel` (claro dentro de seção `.escuro`) redefine `.selo`, `.rotulo`, `.chave` e `.lead` para as cores do tema claro. Selo com `text-transform: none`, igual aos outros | **6,17:1** (`#5A5248` sobre o painel `#E9E6E1`, medido nos pixels) em 390 e 1440 px |
-| 2 (média) | Nav de vidro sobre fundo claro com 3,8 a 4,2:1, cinza "sujo" | **Nav clara sobre seção clara:** um IntersectionObserver (linha de 1 px na altura do meio da nav, sem listener de scroll) adiciona `.nav-clara` quando a nav está sobre `main .claro` ou sobre o painel do contato. Fica off-white a 80 % com blur e texto `#1A1712`, e o botão "Contato" fica escuro. Sobre fundo escuro, o vidro escuro passou de 55 % para 78 %, para que mesmo sem JS ou na transição o texto claro fique ≥ 6,7:1 sobre o off-white. O painel do menu do celular continua escuro | Links e "Spazio 61" (mediana do fundo nos pixels): **1440 px**: topo 15,4 a 15,9:1, Sobre 14,1 a 14,3:1, fotos do Sobre 11,9 a 15,9:1, Linhas 13,1 a 13,9:1, Projetos 13,8 a 14,1:1, fotos de Projetos 13,7 a 15,5:1, Contato 12,9 a 13,5:1. **390 px** ("Spazio 61"): 11,5 a 15,3:1. Cálculo teórico no pior caso: vidro claro sobre escuro 10,4:1; vidro escuro sobre off-white 8,2:1 |
-| 3 | "Pular para o conteúdo" não levava o foco | `tabindex="-1"` no `<main>` das 3 páginas (sem contorno no foco programático) | O foco vai para `#conteudo` |
-| 4 | Links que abrem em nova aba sem aviso | Span `.sr-only` "(abre em nova aba)" no @spazio.61 da frase de Projetos. O JS também acrescenta o aviso nos botões de WhatsApp quando põe `target="_blank"` | Conferido |
-| 5 | Legenda "A loja, na Asa Sul" | Agora é "A loja Spazio 61" | — |
-| 6 | Endereço da política escrito direto no HTML | Vem de `config.js → endereco.busca`, com o mesmo texto como reserva no HTML e o selo "a confirmar" | Conferido |
-| 7 | Vão vazio no topo no celular | Abaixo de 640 px o topo deixa de ter altura de tela cheia e a marca "spazio 61" vem logo depois do botão (margem de 56 a 104 px) | Print em `scratchpad/qa2/topo-390.png` |
+| GSAP (`gsap.min.js`) | 3.15.0 (existe, versão exata do prompt) | jsDelivr `gsap@3.15.0/dist/` (baixado uma vez, hospedado em `site/js/vendor/`) | GSAP Standard "No Charge" License (Webflow): uso comercial permitido em sites, inclusive quando o cliente paga para criar o site. Texto copiado em `js/vendor/LICENSE-gsap.txt`. Restrição: não usar em ferramenta visual que concorra com o Webflow (não é o caso) |
+| ScrollTrigger | 3.15.0 | idem | idem |
+| Lenis (`lenis.min.js`, `lenis.css`) | 1.3.26 (versão exata do prompt) | jsDelivr `lenis@1.3.26/dist/` | MIT (`js/vendor/LICENSE-lenis.txt`). A linha `sourceMappingURL` foi removida para não pedir o `.map` |
+| Archivo (variável, pesos 100–900, usados 400 e 500) | Fontsource `@fontsource-variable/archivo@5`, arquivo `latin-wght-normal` | jsDelivr; licença do repositório google/fonts | SIL OFL 1.1 (`fontes/OFL-Archivo.txt`). Não foi usada a cópia do GetLayers |
 
-Console sem erros nem avisos com a CSP do `_headers`. Nenhuma requisição externa. Reduced-motion continua funcionando, e a troca da nav não depende de animação. O item 11 do QA (`boot.js` carrega e o `main.js` falha) não foi alterado (caso raro, não pedido nesta rodada).
+A Outfit (versão anterior) foi apagada. O glifo "→" não existe no subconjunto latin, então as setas são SVG.
 
-## 13. Pendências
-**Do Lucas**
-- [ ] Fotos: salvar de 6 a 8 fotos limpas (sem texto, pessoas ou marcas) para os 4 placeholders de Projetos. De preferência originais em alta, o que também permitiria ligar o parallax.
-- [ ] Anotar o link do post de origem de cada imagem em `origem-imagens.md`.
-- [ ] Referências: a pasta `projeto/materiais/referencias/layout/` não existe. Se houver as anotações do AERRA, colocar lá.
-- [ ] Licença do AERRA: conferir e registrar em `vellora-time/templates/` antes de adotar.
-- [ ] Decidir se os 5 benefícios dos carrosséis entram no texto (hoje não entram).
-- [ ] Avaliar a sans fina (Outfit). Se preferir serifada nos títulos (como nos carrosséis), avisar: a troca é só de `@font-face` e pesos no CSS.
-- [ ] Confirmar se "Mesas" e "Poltronas" existem nos destaques (não aparecem nos prints).
+## 4. Template Leeward: uso e licença
+- **Licença NÃO verificada.** Antes de qualquer uso comercial ou publicação real: conferir a licença no GetLayers e registrar em `vellora-time/templates/` (TEMPLATE.txt com origem, licença e data), conforme REGRAS-VELLORA.
+- **Aproveitado (estrutura e movimento):**
+  - grid Kelder (quatro quadros 1440/1024/768/390, font-size da raiz por faixa, pesos `--raw-w*`, `fl()` no JS, módulo = coluna + calha, faixas de borda a borda);
+  - tabela de tipos e espaçamentos;
+  - pré-carregamento de módulos com contador real;
+  - cabeçalho que fica sólido e some ao rolar para baixo;
+  - menu móvel com anéis de módulos;
+  - títulos que abrem por quadrados (`clip-path: path()`);
+  - faixa de tiles no topo com dissolução em módulos no scroll e tiles de vidro que reagem ao ponteiro;
+  - frase com fotos inline e véu de células;
+  - pin de etapas com chegada em módulos e linha do tempo;
+  - cards altos com scroller no celular;
+  - marquee;
+  - rodapé com cartão de vidro e parallax;
+  - cursor customizado;
+  - eases e durações.
+- **Não copiado:**
+  - textos, nomes, wordmark e SVGs (cata-vento, turbinas, logos de parceiros);
+  - fotos, vídeos e URLs de assets (nenhuma referência a `storage.getlayers.ai`);
+  - o banner de falha de assets, que é do template;
+  - o CSS compilado do Tailwind (o CSS foi reescrito com classes próprias).
+  - O código JS foi reescrito/adaptado a partir da referência. A lógica de movimento segue a do template.
+- **Mapeamento das 7 seções do Leeward para as 5 da Spazio:**
 
-**Do cliente (ao fechar, ver `trocas-ao-fechar.md`)**
-- [ ] Todos os itens TROCAR do `config.js` (WhatsApp, razão social, CNPJ, e-mail, data da política, fotos).
-- [ ] Confirmar o endereço, as etapas de Atendimento/Projeto/Execução e as descrições das 6 linhas (todos com "a confirmar").
-- [ ] Autorização das imagens.
-- [ ] Formulário real (`/api/lead`), remover o noindex e remover os avisos de "Demonstração".
+| Leeward | Spazio 61 |
+|---|---|
+| Hero (filme + tiles + números + MW ao vivo) | 1. **Topo** escuro com grade de módulos. Tiles com textos públicos (Marcenaria / Casa e empresa / Brasília/DF) e o módulo do WhatsApp no lugar do "Output right now" |
+| What we do (frase com fotos inline) | 2. **O que fazemos**: "Marcenaria [sala] descomplicada, / móveis planejados [lavabo] / para casa [loja] e empresa." |
+| Process (pin de 4 etapas) | 3. **Como funciona**: pin de 3 etapas (Atendimento → Projeto → Execução), todas "a confirmar" |
+| Field planner | **removido**: dependia de números (hectares, valores) que não existem |
+| Neighbours (3 cards) | 4. **Linhas e projetos**: card de foto (sala de jantar), card branco com foto (lavabo), card verde com as 6 linhas |
+| Partners (marquee de logos) | Virou marquee com os **nomes das 6 linhas**, dentro da seção 4. Sem logos e sem parceiros |
+| Footer (cartão de vidro sobre filme) | 5. **Contato**: cartão de vidro sobre fundo escuro de módulos; formulário simulado, endereço, mapa, Instagram e módulo do WhatsApp |
+| Live wind (vento e MW ao vivo) | **removido**: dado inventado. O ponto "ao vivo" virou o ponto verde do WhatsApp |
+
+- **Desvios do prompt (registrados):**
+  - bibliotecas hospedadas no site (CSP 'self');
+  - âncoras tratadas pelo próprio `main.js` (deslizam com o Lenis e levam o foco ao destino, o que o `anchors: true` do Lenis não faz);
+  - sem banner de falha (nada é carregado de fora);
+  - Lenis guiado pelo ticker do GSAP;
+  - com movimento reduzido, o ScrollTrigger é desligado (`ScrollTrigger.disable()`), porque mantém um laço de requestAnimationFrame; assim nada roda com a página parada;
+  - as palavras das etapas usam um tamanho Display próprio por quadro (150/100/72/52), porque "Atendimento" não cabia no Display do template.
+
+## 5. Imagens (todas pequenas; nenhuma em tela cheia, no topo, em fundo ou esticada)
+| Arquivo | Origem | Onde aparece |
+|---|---|---|
+| `assets/sala-de-jantar.webp` (694×862) | `Captura de tela 2026-11-13 130815.png` | Foto inline (150×72), card de foto (~435×690, reduzida), tile do menu |
+| `assets/lavabo.webp` (622×812) | `130909.png` recortado (sem a seta e os pontinhos do Instagram) | Foto inline, card branco (~410×440), — |
+| `assets/loja-spazio-61.webp` (696×865) | `130557.png` | Foto inline circular (72×72), tile do menu |
+| `assets/fabrica.webp` (568×552) | `130957.png` recortado (sem a marca da máquina) | Quadro pequeno na etapa Execução (≤ 22rem) |
+| `assets/logo-spazio-61.webp` | `logo spazio.jpg` | Cabeçalho, rodapé, 404 |
+Todas: uso só em demonstração, sem autorização do cliente (ver `projeto/materiais/origem-imagens.md`).
+
+## 6. Placeholders (identificados com `data-placeholder` + rótulo "… a confirmar")
+1. **Topo:** "Foto ou vídeo do topo a confirmar". Hoje o topo é um fundo escuro com módulos. Com um vídeo/foto em alta (≥ 1920 px), dá para pôr no `.hero-fundo` e ligar o filme.
+2. **Como funciona · Atendimento:** "Foto do atendimento a confirmar". A composição atual é de cor e módulos.
+3. **Como funciona · Projeto:** "Foto do projeto a confirmar". A composição atual é uma prancheta com linhas.
+4. **Linhas e projetos:** só 2 projetos com foto. Novos projetos entram como novos cards (o scroller do celular já comporta mais).
+
+## 7. Itens do `config.js`
+- **TROCAR (13):**
+  - `demonstracao`;
+  - `whatsapp.numero`, `whatsapp.exibicao` e `whatsapp.mensagem`;
+  - `empresa.razaoSocial`, `empresa.cnpj`, `empresa.email` e `empresa.atualizacaoPolitica`;
+  - `topo.placeholderMidia`;
+  - os 2 placeholders das etapas;
+  - `contato.avisoDemo` e `contato.sucesso`.
+- **confirmar:** endereço (linhas, CEP, busca do mapa), etapas e descrições das linhas.
+- Nenhum TROCAR fora do `config.js`.
+
+## 8. Testes feitos (16/11/2026)
+Servidor local aplicando o `_headers` (CSP ativa) e Playwright em 1440, 1024, 768 e 390 px. Os prints estão no scratchpad da sessão (`leeward/`).
+- **Console e rede:** console sem erros nem violações de CSP; nenhuma requisição a domínio externo.
+- **Layout:** sem rolagem horizontal; pin funcionando nos 4 quadros; os quadrados da chegada somem depois de pousar.
+- **Menu (390):** abre por teclado com os anéis; o foco vai para "Fechar menu" e o Tab fica preso no menu; o Esc fecha e devolve o foco ao botão; `inert` quando fechado; a rolagem é liberada.
+- **Formulário:**
+  - com erro, as mensagens aparecem nos campos e o foco vai ao primeiro;
+  - com sucesso, a mensagem aparece em `aria-live`;
+  - nada em localStorage, sessionStorage ou cookies, e nenhuma requisição.
+- **Movimento reduzido:** sem Lenis, sem pin, sem pré-carregamento animado, títulos visíveis; 0 requestAnimationFrame em 1 s com a página parada; as etapas viram abas.
+- **file://:** o JS, o GSAP, o Lenis, as imagens e o link do WhatsApp funcionam. **O Chrome bloqueia a fonte por `file://`** (CORS de fontes em origem `null`), então a página aparece com Arial. Para ver o site fiel, use um servidor local: `python -m http.server 8080 --directory site` e abra `http://localhost:8080`.
+- **Limite conhecido:** sem movimento reduzido, o ScrollTrigger e o Lenis mantêm um laço de requestAnimationFrame enquanto a página está aberta (comportamento das bibliotecas).
+
+## 8b. Correções da rodada QA/segurança (16/11/2026)
+1. **Contraste na etapa "Projeto"**: o texto das etapas agora fica sobre um painel escuro (`rgb(26 23 18 / 0.8)`, cantos arredondados). Medido nos pixels dos prints, com a etapa Projeto ativa (fundo bege):
+   - em 390 px: nome (#FFF) 13,87:1 na mediana e 8,77:1 no pior pixel de fundo; descrição e selo (#E6DED3) 10,41:1 e 6,58:1;
+   - em 1440 px: nome 14,06:1 e 8,18:1; descrição e selo 10,55:1 e 6,14:1.
+2. **Leitor de tela nas etapas**:
+   - Os textos visuais das etapas (`.proc-textos`) ficaram `aria-hidden`.
+   - Uma lista `.proc-lista` com as três etapas (nome, selo "a confirmar" e descrição) fica sempre na árvore de acessibilidade, em sr-only.
+   - Com movimento reduzido, a lista aparece visível (3 colunas no desktop, empilhada no celular) e a linha do tempo, as palavras e o texto sobre a caixa somem (sem abas).
+   - Os botões da linha do tempo têm `aria-controls="proc-caixa"`.
+3. **Título das linhas**: "Nossas linhas." no `config.js` e no HTML de reserva.
+4. **Comentários**: tirei do CSS, dos JS próprios e do `config.js` as menções ao template, à plataforma, à licença e a `projeto/`. A procedência fica só nestas notas.
+5. **Formulário sem JS**: `method="dialog"`. Sem JS não há navegação nem dados na URL; com JS o envio continua simulado.
+Testado em 390 e 1440 px com o `_headers` aplicado: console limpo; nenhuma requisição externa; movimento reduzido sem Lenis e sem pin, com a lista visível e 0 requestAnimationFrame em 1 s. Prints em `scratchpad/leeward/*-r2-*.png`.
+
+## 9. Pendências
+- **Lucas:**
+  - conferir a licença do Leeward no GetLayers e registrar em `vellora-time/templates/`;
+  - fotos em alta resolução (topo, etapas, mais projetos);
+  - links dos posts de origem das imagens;
+  - decidir se os 5 benefícios dos carrosséis entram;
+  - confirmar "Mesas" e "Poltronas" nos destaques;
+  - decidir se o `file://` com Arial basta ou se a fonte deve ir embutida (exigiria `font-src data:` na CSP).
+- **Cliente, ao fechar:**
+  - trocar os 13 TROCAR;
+  - confirmar endereço, etapas e descrições;
+  - autorizar as imagens;
+  - ligar o formulário real (`/api/lead` + Turnstile; a CSP vai precisar liberar `challenges.cloudflare.com` e `connect-src 'self'`);
+  - tirar o noindex e os avisos de demonstração.
+- **QA e segurança:** revisar esta versão (os relatórios `projeto/qa.md` e `projeto/seguranca.md` ainda são da versão AERRA).

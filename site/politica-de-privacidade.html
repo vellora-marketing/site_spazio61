@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="no-js">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <title>Política de privacidade · Spazio 61</title>
   <meta name="description" content="Política de privacidade do site da Spazio 61 (versão de demonstração).">
@@ -11,27 +11,27 @@
   <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/vw.js"></script>
   <script src="config.js" defer></script>
-  <script src="js/main.js" defer></script>
+  <script src="js/cfg.js" defer></script>
 </head>
 <body>
-  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-  <header class="topo-simples">
-    <div class="wrap">
-      <a class="nav-logo" href="index.html">
-        <img src="assets/logo-spazio-61.webp" width="40" height="40" alt="">
-        <span>Spazio 61</span>
-      </a>
-      <a class="link-voltar" href="index.html">Voltar ao início</a>
-    </div>
-  </header>
+<header class="hd hd-solido" data-solid>
+  <a class="hd-marca" href="index.html" aria-label="Spazio 61, página inicial">
+    <img class="hd-logo" src="assets/logo-spazio-61.webp" width="52" height="52" alt="">
+    <span class="hd-nome"><b>Spazio 61</b><span>Home &amp; Office</span></span>
+  </a>
+  <a class="plate" href="index.html">
+    <span class="plate-corpo"><span class="plate-rolo"><span>Voltar ao início</span><span aria-hidden="true">Voltar ao início</span></span></span>
+  </a>
+</header>
 
-  <main id="conteudo" class="doc claro" tabindex="-1">
-    <div class="wrap">
-      <article class="doc-corpo">
-        <p class="rotulo">Documento</p>
-        <h1>Política de privacidade</h1>
+<main id="conteudo" class="doc" tabindex="-1">
+  <article class="doc-corpo">
+        <p class="rotulo"><span class="rotulo-q" aria-hidden="true"></span>Documento</p>
+        <h1 class="t-h1">Política de privacidade</h1>
         <p>Última atualização: <span data-cfg="empresa.atualizacaoPolitica">a definir</span>.</p>
 
         <div class="doc-aviso">
@@ -70,23 +70,15 @@
         <h2>6. Mudanças nesta política</h2>
         <p>Esta política pode ser atualizada. A data da última atualização fica no topo desta página.</p>
       </article>
-    </div>
-  </main>
+</main>
 
-  <footer class="rodape">
-    <div class="wrap rodape-grade">
-      <div class="rodape-marca">
-        <img src="assets/logo-spazio-61.webp" width="36" height="36" alt="" loading="lazy">
-        <span>Spazio 61 · Home &amp; Office</span>
-      </div>
-      <nav aria-label="Rodapé">
-        <ul>
-          <li><a href="index.html">Início</a></li>
-          <li><a data-instagram href="https://www.instagram.com/spazio.61/" target="_blank" rel="noopener noreferrer">Instagram<span class="sr-only"> (abre em nova aba)</span></a></li>
-        </ul>
-      </nav>
-      <p class="rodape-demo">Demonstração · dados provisórios</p>
-    </div>
-  </footer>
+<footer class="rodape-simples">
+  <div class="ft-base grade">
+    <p>© <span data-ano>2026</span> <span data-cfg="empresa.nomeCompleto">Spazio61 Home &amp; Office</span></p>
+    <a href="index.html">Página inicial</a>
+    <a data-instagram href="https://www.instagram.com/spazio.61/" target="_blank" rel="noopener noreferrer">Instagram<span class="sr-only"> (abre em nova aba)</span></a>
+    <p class="ft-base-demo">Demonstração · dados provisórios</p>
+  </div>
+</footer>
 </body>
 </html>
