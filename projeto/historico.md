@@ -24,7 +24,7 @@
 - Lucas: conferir a licença do Leeward no GetLayers (uso comercial e custo) e registrar em `vellora-time/templates/leeward/TEMPLATE.txt`.
 - Lucas: salvar fotos limpas em alta (para a grade, o topo e "Como funciona") e anotar os links dos posts em `origem-imagens.md`.
 - Lucas: decidir sobre os 5 benefícios dos carrosséis e sobre a caixa de "Como funciona", grande e vazia com movimento reduzido.
-- Incluir `projeto/materiais/imagens/` e `projeto/materiais/referencias/` no `.gitignore` (aguarda ok).
+- ~~Incluir `projeto/materiais/imagens/` e `projeto/materiais/referencias/` no `.gitignore`~~ feito (commit c632309): imagens, referências e originais ficam fora do Git; os .md de `projeto/materiais/` continuam.
 - Carlos vai fazer alterações: rodar `git pull` antes de mexer.
 - Ao fechar com o cliente: seguir `projeto/trocas-ao-fechar.md`.
 
